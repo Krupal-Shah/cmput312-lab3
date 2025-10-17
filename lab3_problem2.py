@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from VSMaterial import *
 from time import sleep
 from queue import Queue

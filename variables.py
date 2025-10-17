@@ -22,9 +22,6 @@ CMPUT 312 collaboration policy.
 from ev3dev2.sensor import INPUT_1
 from ev3dev2.sensor.lego import TouchSensor
 from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B
-IMPORTS_AVAILABLE = False
-INPUT_1 = OUTPUT_A = OUTPUT_B = None
-TouchSensor = LargeMotor = None
 
 # Note: Link 1 will always have negated angle compared to link 2
 # because of the way the motors are mounted on the robot arm
@@ -36,11 +33,6 @@ l2 = 7.0    # in cm
 LINK_1 = OUTPUT_A
 LINK_2 = OUTPUT_B
 
-try:
-    link_1_motor = LargeMotor(OUTPUT_A)
-    link_2_motor = LargeMotor(OUTPUT_B)
-    touch_sensor = TouchSensor(INPUT_1)  # on port 1
-    IMPORTS_AVAILABLE = True
-except Exception as e:
-    print("Imports not available:", e)
-    IMPORTS_AVAILABLE = False
+link_1_motor = LargeMotor(OUTPUT_A)
+link_2_motor = LargeMotor(OUTPUT_B)
+touch_sensor = TouchSensor(INPUT_1)  # on port 1

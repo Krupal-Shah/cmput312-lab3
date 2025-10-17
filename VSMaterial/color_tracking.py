@@ -29,7 +29,6 @@ greenHighMask = (150, 255, 255)
 
 
 class Tracker:
-
     def __init__(self, pointColor, goalColor):
         self.point = (0, 0, 0)
         self.goal = (0, 0, 0)
@@ -118,7 +117,8 @@ class Tracker:
 
 if __name__ == "__main__":
     print("Tracker Setup")
-    tracker = Tracker('g', 'b')
+
+    tracker = Tracker('g', 'r')
     print("Moving on")
     while True:
         print("Point is at: "+str(tracker.point))

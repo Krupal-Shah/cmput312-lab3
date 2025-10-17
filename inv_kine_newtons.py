@@ -49,9 +49,8 @@ Y_HOME = 0
 
 DEG = math.pi/180.0
 
-if v.IMPORTS_AVAILABLE:
-    v.link_1_motor.reset()
-    v.link_2_motor.reset()
+v.link_1_motor.reset()
+v.link_2_motor.reset()
 
 
 def jacobian_2r(theta1, theta2):
