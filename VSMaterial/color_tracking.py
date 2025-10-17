@@ -15,7 +15,7 @@ redLowMask = (0, 50, 50)
 redHighMask = (10, 255, 255)
 
 # If the ball is blue
-blueLowMask = (100, 150, 0)
+blueLowMask = (100, 70, 0)
 blueHighMask = (140, 255, 255)
 
 # If the ball is orange
@@ -23,10 +23,12 @@ orangeLowMask = (5, 50, 50)
 orangeHighMask = (20, 255, 255)
 
 # If the ball is green
-greenLowMask = (90, 50, 50)
-greenHighMask = (150, 255, 255)
+greenLowMask = (35, 115, 0)
+greenHighMask = (83, 255, 255)
 ########################################
 
+yellowLowMask=(19,76,141)
+yellowHighMask=(46,190,255)
 
 class Tracker:
     def __init__(self, pointColor, goalColor):
@@ -87,6 +89,9 @@ class Tracker:
         if color == 'g':
             # Green Tracking
             mask = cv2.inRange(hsv, greenLowMask, greenHighMask)
+        if color == 'y':
+            # Yellow Tracking
+            mask = cv2.inRange(hsv, yellowLowMask, yellowHighMask)
         # Perform erosion and dilation in the image (in 11x11 pixels squares) in order to reduce the "blips" on the mask
         mask = cv2.erode(mask, np.ones((11, 11), np.uint8), iterations=2)
         mask = cv2.dilate(mask, np.ones((11, 11), np.uint8), iterations=5)
@@ -118,7 +123,7 @@ class Tracker:
 if __name__ == "__main__":
     print("Tracker Setup")
 
-    tracker = Tracker('g', 'r')
+    tracker = Tracker('b', 'g')
     print("Moving on")
     while True:
         print("Point is at: "+str(tracker.point))
