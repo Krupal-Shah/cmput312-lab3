@@ -36,3 +36,5 @@ LINK_2 = OUTPUT_B
 link_1_motor = LargeMotor(OUTPUT_A)
 link_2_motor = LargeMotor(OUTPUT_B)
 touch_sensor = TouchSensor(INPUT_1)  # on port 1
+
+SAFETY_MODE = True
