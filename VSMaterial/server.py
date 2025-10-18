@@ -10,16 +10,13 @@ from queue import Queue
 
 class Server:
     def __init__(self, host, port):
-       # setup server socket
-        serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # We need to use the ip address that shows up in ipconfig for the usb ethernet adapter that handles the comunication between the PC and the brick
-        print("Setting up Server\nAddress: " + host + "\nPort: " + str(port))
-
-        serversocket.bind((host, port))
-        # queue up to 5 requests
-        serversocket.listen(5)
-        self.cs, addr = serversocket.accept()
-        print("Connected to: " + str(addr))
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        print(f"Setting up Server\nAddress: {host or '0.0.0.0'}\nPort: {port}")
+        sock.bind(("", port))                 # <-- listen on ALL local NICs
+        sock.listen(5)
+        self.cs, addr = sock.accept()
+        print("Connected to:", addr)
 
     # Sends set of angles to the brick via TCP.
     # Input: base_angle [Float]: The angle by which we want the base to move

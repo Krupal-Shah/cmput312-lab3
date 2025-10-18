@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 
-from VSMaterial import *
+# from VSMaterial import *
+from VSMaterial import client
 import utils as ut
 import variables as v
 from time import sleep
 
 
-host = "192.168.0.2"
+host = "192.168.0.3"
 port = 9999
 client = client.Client(host, port)
 SPEED = 50
-
+# reset motors
+v.link_1_motor.reset()
+v.link_2_motor.reset()
 
 def main():
     while True:
@@ -37,4 +40,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+        # handle keyboard interrupt
+        v.link_1_motor.off()
+        v.link_2_motor.off()
+    except KeyboardInterrupt:
+        v.link_1_motor.off()
+        v.link_2_motor.off()
