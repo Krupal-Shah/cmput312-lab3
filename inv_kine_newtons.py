@@ -34,8 +34,8 @@ CMPUT 312 collaboration policy.
 """
 
 import math
-import utils as ut
-import variables as v
+# import utils as ut
+# import variables as v
 
 L1, L2 = 115, 70        # link lengths in mm
 
@@ -49,8 +49,8 @@ Y_HOME = 0
 
 DEG = math.pi/180.0
 
-v.link_1_motor.reset()
-v.link_2_motor.reset()
+# v.link_1_motor.reset()
+# v.link_2_motor.reset()
 
 
 def jacobian_2r(theta1, theta2):

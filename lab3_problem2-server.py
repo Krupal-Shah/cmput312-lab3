@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 
-from inv_kine_newtons import line_waypoints
+# from inv_kine_newtons import line_waypoints
 import numpy as np
 from queue import Queue
 from time import sleep
 from VSMaterial import server
 from VSMaterial import color_tracking
-
+import math
 
 host = "192.168.0.3"
 port = 9999
 server = server.Server(host, port)
 queue = Queue()
-SPEED = 50
+SPEED = 30
 tracker = color_tracking.Tracker('b', 'g')
 
 
@@ -52,7 +52,7 @@ def inv_kin_broyden(
         target_pos: (list | tuple),
         initial_jacobian: np.ndarray,
         alpha=0.5,
-        max_iters=10):
+        max_iters=10, threshold=30):
     """
     Inverse kinematics using Broyden's method to update the Jacobian.
 
@@ -67,9 +67,9 @@ def inv_kin_broyden(
     Returns:
     - joint_angles: Estimated joint angles to reach the target position.
     """
-    joint_angles = [0.0, 0.0]  # Initial guess for joint angles
+    joint_angles = [5.0, -5.0]  # Initial guess for joint angles
     jacobian = initial_jacobian
-    waypoints = line_waypoints(current_pos, target_pos, step_size=0.2)
+    waypoints = line_waypoints(current_pos, target_pos, max_step=20)
 
     for waypoint in waypoints:
         target_pos = waypoint
@@ -82,8 +82,9 @@ def inv_kin_broyden(
                      target_pos[1] - current_pos[1])
             error_norm = np.linalg.norm(error)
 
-            if error_norm < 0.1:
+            if error_norm < threshold:
                 print(f"threshold met: (error={error_norm:.2f})")
+                
                 break
 
             # Compute inverse of Jacobian (2x2 matrix inversion)
@@ -97,6 +98,13 @@ def inv_kin_broyden(
 
             # Update joint angles using the inverse Jacobian
             delta_theta = alpha * np.dot(inv_jacobian, np.array(error))
+            max_step_deg = 10.0
+            max_mag = max(abs(delta_theta[0]), abs(delta_theta[1]))
+            if max_mag > max_step_deg:
+                scale = max_step_deg / max_mag
+                delta_theta[0] *= scale
+                delta_theta[1] *= scale
+                
             joint_angles[0] += delta_theta[0]
             joint_angles[1] += delta_theta[1]
 
@@ -126,6 +134,13 @@ def get_image_position():
             print("Current Point:", tracker.point, "Goal Point:", tracker.goal)
             return tracker.point[0][:2], tracker.goal[0][:2]
 
+def line_waypoints(start, goal, max_step=20.0):  # mm per step
+    dx, dy = goal[0]-start[0], goal[1]-start[1]
+    dist = math.hypot(dx, dy)
+    if dist <= max_step:
+        return [goal]
+    n = int(math.ceil(dist/max_step))
+    return [(start[0] + (i/n)*dx, start[1] + (i/n)*dy) for i in range(1, n+1)]
 
 def main():
     current_point, goal_point = get_image_position()
