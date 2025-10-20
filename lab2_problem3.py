@@ -110,7 +110,7 @@ def invKin2D(pos, mode):
 
 
 def main():
-    mode = 1                        # 0: Moving to positon, 1: Midpoint Calculation
+    mode = 0                        # 0: Moving to positon, 1: Midpoint Calculation
     inv_mode = 1                    # 0: Newton, 1: Analytical
     pos = [x, y] = 5.41, -10.77     # target position in cm
 
