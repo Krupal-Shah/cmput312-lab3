@@ -1,6 +1,38 @@
 #!/usr/bin/env python3
 
-# from inv_kine_newtons import line_waypoints
+
+"""
+Group Members: Krupal Shah & Jaspreet Singh Chhabra
+
+Date: October 21th 2025
+ 
+Brick Number: G20
+
+Lab Number: 3
+
+Problem Number: 2 (server side implementation)
+ 
+Brief Program/Problem Description:
+    -Implement Uncalibrated Visual Servoing (UVS) to move your 2-DOF planar robot arm to a desired position. 
+        Your program should be able to dynamically track the end-effector of your robot and a moving target.
+
+Brief Solution Summary:
+    - Estimate the initial Jacobian. Tip: You can do that using orthogonal motions
+    - Define a stop criteria for your looping algorithm
+    - Implement Broyden update
+    - Calculate Xdot base on the local linear model
+    - Update X (motor joint angles)
+
+Used Resources/Collaborators:
+    - Lecture slides and notes from CMPUT 312.
+    - Textbook: "Introduction to Robotics: Mechanics and Control" by John J. Craig.
+    - OpenAI ChatGPT for code debugging assistance.
+
+I/we hereby certify that I/we have produced the following solution 
+using only the resources listed above in accordance with the 
+CMPUT 312 collaboration policy.
+"""
+
 import numpy as np
 from queue import Queue
 from time import sleep
@@ -84,7 +116,7 @@ def inv_kin_broyden(
 
             if error_norm < threshold:
                 print(f"threshold met: (error={error_norm:.2f})")
-                
+
                 break
 
             # Compute inverse of Jacobian (2x2 matrix inversion)
@@ -104,7 +136,7 @@ def inv_kin_broyden(
                 scale = max_step_deg / max_mag
                 delta_theta[0] *= scale
                 delta_theta[1] *= scale
-                
+
             joint_angles[0] += delta_theta[0]
             joint_angles[1] += delta_theta[1]
 
@@ -134,6 +166,7 @@ def get_image_position():
             print("Current Point:", tracker.point, "Goal Point:", tracker.goal)
             return tracker.point[0][:2], tracker.goal[0][:2]
 
+
 def line_waypoints(start, goal, max_step=20.0):  # mm per step
     dx, dy = goal[0]-start[0], goal[1]-start[1]
     dist = math.hypot(dx, dy)
@@ -141,6 +174,7 @@ def line_waypoints(start, goal, max_step=20.0):  # mm per step
         return [goal]
     n = int(math.ceil(dist/max_step))
     return [(start[0] + (i/n)*dx, start[1] + (i/n)*dy) for i in range(1, n+1)]
+
 
 def main():
     current_point, goal_point = get_image_position()
